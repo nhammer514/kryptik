@@ -62,17 +62,18 @@ function generate(levelSize){
             levelMatrix[i][j] = 0;
         }
     }
-    console.log(levelMatrix)
-    levelMatrix[9][0] = 1;
-    levelMatrix[9][1] = 1;
-    levelMatrix[9][2] = 1;
-    levelMatrix[9][3] = 1;
-    levelMatrix[9][4] = 1;
-    levelMatrix[9][5] = 1;
-    levelMatrix[9][6] = 1;
-    levelMatrix[9][7] = 1;
-    levelMatrix[9][8] = 1;
-    levelMatrix[9][9] = 1;
+    for (let dy = 0; dy < levelSize; dy++){
+        levelMatrix[dy][0] = 1;
+    }
+    for (let dy = 0; dy < levelSize; dy++){
+        levelMatrix[dy][9] = 1;
+    }
+    for (let dx = 0; dx < levelSize; dx++){
+        levelMatrix[0][dx] = 1;
+    }
+    for (let dx = 0; dx < levelSize; dx++){
+        levelMatrix[9][dx] = 1;
+    }
 }
 
 export { generate, load, levelMatrix, drawMapText};
