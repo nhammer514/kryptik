@@ -24,7 +24,7 @@ scene.add(ambientLight);
 // Player
 level.generate(10);
 level.load(scene);
-player.spawn(scene);
+player.spawn(scene, [4,4]);
 
 // Per-Frame/Animate/Step
 function animate() {
