@@ -2,6 +2,10 @@ body{
     background-color: #2D2D2D;
 }
 
+div{
+    color: white;
+}
+
 div#game{
     margin: auto;
     border: solid 1px white;
