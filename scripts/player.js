@@ -96,12 +96,9 @@ function changePosition(){
 }
 
 function movePosition(){
-    const debugDoc = document.getElementById('debug');
-
     object.position.x += (toPosition.x - object.position.x) / 10;
     object.position.z += (toPosition.z - object.position.z) / 10;
     camera.rotation.y += (toRotation.y - camera.rotation.y) / 10;
-    debugDoc.children[0].innerHTML = level.drawMapText();
 
 }
 
