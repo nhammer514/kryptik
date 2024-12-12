@@ -47,77 +47,66 @@ function spawn(_scene, _position){
 }
 
 
-function changePosition(){
-    let playerDirection;
+function changePosition() {
+    const directionMap = [
+        { x: 1, z: 0 },  // Case 0 (East)
+        { x: 0, z: 1 },  // Case 1 (North)
+        { x: -1, z: 0 }, // Case 2 (West)
+        { x: 0, z: -1 }  // Case 3 (South)
+    ];
 
+    const updatePosition = (dx, dz) => {
+        const newX = playerPosition[0] + dx;
+        const newZ = playerPosition[1] + dz;
+
+        if (level.levelMatrix[newX]?.[newZ] === 0) {
+            playerPosition[0] = newX;
+            playerPosition[1] = newZ;
+        }
+    };
+
+    // Reset current position in the level matrix
     level.levelMatrix[playerPosition[0]][playerPosition[1]] = 0;
 
-    if (keys.ArrowLeft){
-        --playerDirectionReal;
-    };
+    // Update direction
+    if (keys.ArrowLeft) playerDirectionReal--;
+    if (keys.ArrowRight) playerDirectionReal++;
 
-    if (keys.ArrowRight){
-        ++playerDirectionReal;
-    };
+    const playerDirection = ((playerDirectionReal % 4) + 4) % 4; // Normalize direction (0-3)
 
-    playerDirection = () => {
-        if (playerDirectionReal < 0) { return ((4-(Math.abs(playerDirectionReal) % 4))) }
-        else { return (Math.abs(playerDirectionReal % 4)) }
+    // Handle movement
+    if (keys.ArrowUp) {
+        updatePosition(directionMap[playerDirection].x, directionMap[playerDirection].z);
+    }
+    if (keys.ArrowDown) {
+        updatePosition(-directionMap[playerDirection].x, -directionMap[playerDirection].z);
     }
 
-    switch (((playerDirection()))){
-        case 0:
-            if (keys.ArrowUp && (level.levelMatrix[playerPosition[0]+1][playerPosition[1]] == 0))
-                { playerPosition[0] = playerPosition[0] + 1};
-            if (keys.ArrowDown && (level.levelMatrix[playerPosition[0]-1][playerPosition[1]] == 0))
-                { playerPosition[0] = playerPosition[0] - 1};
-            if (keys.Enter && (typeof level.levelMatrix[playerPosition[0]+1][playerPosition[1]] === "object"))
-                {
-                    var object = level.levelMatrix[playerPosition[0]+1][playerPosition[1]]
-                    console.log(object)
-                    switch (object.constructor.name)
-                    {
-                        case 'itemBase':
-                            inventory.changeInventory(inventory.selectedInventorySlot, object.item)
-                            object.destroy()
-                            break;
-                        case 'enemyBase':
-                            object.updatePosition([object.levelPosition[0]+1, object.levelPosition[1]])
-                            break;                  
-                    }
+    // Handle interaction
+    if (keys.Enter) {
+        const interactX = playerPosition[0] + directionMap[playerDirection].x;
+        const interactZ = playerPosition[1] + directionMap[playerDirection].z;
 
-
-                };
-            break;
-        case 4:
-            if (keys.ArrowUp && (level.levelMatrix[playerPosition[0]+1][playerPosition[1]] == 0))
-                { playerPosition[0] = playerPosition[0] + 1};
-            if (keys.ArrowDown && (level.levelMatrix[playerPosition[0]-1][playerPosition[1]] == 0))
-                { playerPosition[0] = playerPosition[0] - 1};
-            break;
-        case 1:
-            if (keys.ArrowUp && (level.levelMatrix[playerPosition[0]][playerPosition[1]+1] == 0))
-                { playerPosition[1] = playerPosition[1] + 1};
-            if (keys.ArrowDown && (level.levelMatrix[playerPosition[0]][playerPosition[1]-1] == 0))
-                { playerPosition[1] = playerPosition[1] - 1};
-            break;
-        case 2:
-            if (keys.ArrowUp && (level.levelMatrix[playerPosition[0]-1][playerPosition[1]] == 0))
-                { playerPosition[0] = playerPosition[0] - 1};
-            if (keys.ArrowDown && (level.levelMatrix[playerPosition[0]+1][playerPosition[1]] == 0))
-                { playerPosition[0] = playerPosition[0] + 1};
-            break;
-        case 3:
-            if (keys.ArrowUp && (level.levelMatrix[playerPosition[0]][playerPosition[1]-1] == 0))
-                { playerPosition[1] = playerPosition[1] - 1};
-            if (keys.ArrowDown && (level.levelMatrix[playerPosition[0]][playerPosition[1]+1] == 0))
-                { playerPosition[1] = playerPosition[1] + 1};
-            break;
+        const target = level.levelMatrix[interactX]?.[interactZ];
+        console.log(target)
+        if (typeof target === "object") {
+            switch (target.constructor.name) {
+                case 'itemBase':
+                    inventory.changeInventory(inventory.selectedInventorySlot, target.item);
+                    target.destroy();
+                    break;
+                case 'enemyBase':
+                    target.updatePosition([interactX+1, interactZ]);
+                    break;
+            }
+        }
     }
-    level.levelMatrix[playerPosition[0]][playerPosition[1]] = 2
-    toRotation.y = -(playerDirectionReal*90) * (Math.PI/180)
-    toPosition.x = playerPosition[0]*16
-    toPosition.z = playerPosition[1]*16
+
+    // Update level matrix and target positions
+    level.levelMatrix[playerPosition[0]][playerPosition[1]] = 2;
+    toRotation.y = -(playerDirectionReal * 90) * (Math.PI / 180);
+    toPosition.x = playerPosition[0] * 16;
+    toPosition.z = playerPosition[1] * 16;
 }
 
 function movePosition(){
