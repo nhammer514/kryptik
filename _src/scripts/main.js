@@ -3,7 +3,7 @@ import { GLTFLoader } from 'https://cdn.skypack.dev/three@0.128.0/examples/jsm/l
 import * as player from './player.js';
 import * as level from './level.js';
 import * as itemManager from './itemManager.js';
-import * as enemyManager from './enemy.js';
+import * as enemyManager from './enemyManager.js';
 
 
 // Scene
@@ -25,14 +25,15 @@ scene.background = bg;
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
 scene.add(ambientLight);
 
-// Player
+// Level generation
 level.generate(10);
 level.load(scene);
-player.spawn(scene, [1,1]);
-itemManager.createItem(scene, itemManager.itemData.potion,[3,3]);
-itemManager.createItem(scene, itemManager.itemData.potion,[3,4]);
 enemyManager.spawnEnemy(scene, enemyManager.enemyData.rat, [4,4])
-//enemyManager.destroyEnemy(scene, level.levelMatrix[4][4]);
+itemManager.spawnItem(scene, itemManager.itemData.potion, [4, 3])
+
+
+// Player
+player.spawn(scene, [1,1]);
 
 // Per-Frame/Animate/Step
 function animate() {
@@ -41,11 +42,11 @@ function animate() {
 
 
   
-  scene.children.forEach((child) => {
-    if (typeof child.animate === "function"){
-      child.animate();
-    }
-  });
+  // scene.children.forEach((child) => {
+  //   if (typeof child.animate === "function"){
+  //     child.animate();
+  //   }
+  // });
 
     level.levelMatrix.forEach(row => {
         row.forEach(enemy => {
