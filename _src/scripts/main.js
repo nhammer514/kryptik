@@ -3,6 +3,7 @@ import { GLTFLoader } from 'https://cdn.skypack.dev/three@0.128.0/examples/jsm/l
 import * as player from './player.js';
 import * as level from './level.js';
 import * as itemManager from './itemManager.js';
+import * as enemyManager from './enemy.js';
 
 
 // Scene
@@ -30,17 +31,30 @@ level.load(scene);
 player.spawn(scene, [1,1]);
 itemManager.createItem(scene, itemManager.itemData.potion,[3,3]);
 itemManager.createItem(scene, itemManager.itemData.potion,[3,4]);
+enemyManager.spawnEnemy(scene, enemyManager.enemyData.rat, [4,4])
+//enemyManager.destroyEnemy(scene, level.levelMatrix[4][4]);
 
 // Per-Frame/Animate/Step
 function animate() {
   player.movePosition()
   requestAnimationFrame( animate );
 
+
+  
   scene.children.forEach((child) => {
     if (typeof child.animate === "function"){
       child.animate();
     }
   });
+
+    level.levelMatrix.forEach(row => {
+        row.forEach(enemy => {
+            if (enemy && typeof enemy.animate === "function") {
+                enemy.animate();
+            }
+        });
+    });
+
   renderer.render( scene, player.camera );
 }
 animate()
