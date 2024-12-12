@@ -25,6 +25,7 @@ htmlInventory.addEventListener('dblclick', (event) => {
         resetGUI()
     }
 });
+
 function changeInventory(_slot, _item){
     inventory[_slot] = _item
     resetGUI()

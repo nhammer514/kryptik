@@ -43,7 +43,6 @@ function spawn(_scene, _position){
     toRotation.y = -(playerDirectionReal*90) * (Math.PI/180)
     toPosition.x = playerPosition[0]*16
     toPosition.z = playerPosition[1]*16
-    inventory.changeInventory(1, itemManager.itemData.potion)
     inventory.slotSelected(0)
 }
 
@@ -72,13 +71,21 @@ function changePosition(){
                 { playerPosition[0] = playerPosition[0] + 1};
             if (keys.ArrowDown && (level.levelMatrix[playerPosition[0]-1][playerPosition[1]] == 0))
                 { playerPosition[0] = playerPosition[0] - 1};
-            if (keys.Enter && Array.isArray(level.levelMatrix[playerPosition[0]+1][playerPosition[1]]))
+            if (keys.Enter && (typeof level.levelMatrix[playerPosition[0]+1][playerPosition[1]] === "object"))
                 {
-                    let _item = level.levelMatrix[playerPosition[0]+1][playerPosition[1]]
-                    console.log(_item[1])
-                    inventory.changeInventory(inventory.selectedInventorySlot, _item[1].data)
-                    _item[1].visible = false;
-                    level.levelMatrix[playerPosition[0]+1][playerPosition[1]] = 0
+                    var object = level.levelMatrix[playerPosition[0]+1][playerPosition[1]]
+                    console.log(object)
+                    switch (object.constructor.name)
+                    {
+                        case 'itemBase':
+                            inventory.changeInventory(inventory.selectedInventorySlot, object.item)
+                            object.destroy()
+                            break;
+                        case 'enemyBase':
+                            object.updatePosition([object.levelPosition[0]+1, object.levelPosition[1]])
+                            break;                  
+                    }
+
 
                 };
             break;
@@ -87,60 +94,24 @@ function changePosition(){
                 { playerPosition[0] = playerPosition[0] + 1};
             if (keys.ArrowDown && (level.levelMatrix[playerPosition[0]-1][playerPosition[1]] == 0))
                 { playerPosition[0] = playerPosition[0] - 1};
-            if (keys.Enter && Array.isArray(level.levelMatrix[playerPosition[0]+1][playerPosition[1]]))
-                {
-                    let _item = level.levelMatrix[playerPosition[0]+1][playerPosition[1]]
-                    console.log(_item[1])
-                    inventory.changeInventory(inventory.selectedInventorySlot, _item[1].data)
-                    _item[1].visible = false;
-                    level.levelMatrix[playerPosition[0]+1][playerPosition[1]] = 0
-
-                };
             break;
         case 1:
             if (keys.ArrowUp && (level.levelMatrix[playerPosition[0]][playerPosition[1]+1] == 0))
                 { playerPosition[1] = playerPosition[1] + 1};
             if (keys.ArrowDown && (level.levelMatrix[playerPosition[0]][playerPosition[1]-1] == 0))
                 { playerPosition[1] = playerPosition[1] - 1};
-            if (keys.Enter && Array.isArray(level.levelMatrix[playerPosition[0]][playerPosition[1]+1]))
-                {
-                    let _item = level.levelMatrix[playerPosition[0]][playerPosition[1]+1]
-                    console.log(_item[1])
-                    inventory.changeInventory(inventory.selectedInventorySlot, _item[1].data)
-                    _item[1].visible = false;
-                    level.levelMatrix[playerPosition[0]][playerPosition[1]+1] = 0
-
-                };
             break;
         case 2:
             if (keys.ArrowUp && (level.levelMatrix[playerPosition[0]-1][playerPosition[1]] == 0))
                 { playerPosition[0] = playerPosition[0] - 1};
             if (keys.ArrowDown && (level.levelMatrix[playerPosition[0]+1][playerPosition[1]] == 0))
                 { playerPosition[0] = playerPosition[0] + 1};
-            if (keys.Enter && Array.isArray(level.levelMatrix[playerPosition[0]-1][playerPosition[1]]))
-                {
-                    let _item = level.levelMatrix[playerPosition[0]-1][playerPosition[1]]
-                    console.log(_item[1])
-                    inventory.changeInventory(inventory.selectedInventorySlot, _item[1].data)
-                    _item[1].visible = false;
-                    level.levelMatrix[playerPosition[0]-1][playerPosition[1]] = 0
-
-                };
             break;
         case 3:
             if (keys.ArrowUp && (level.levelMatrix[playerPosition[0]][playerPosition[1]-1] == 0))
                 { playerPosition[1] = playerPosition[1] - 1};
             if (keys.ArrowDown && (level.levelMatrix[playerPosition[0]][playerPosition[1]+1] == 0))
                 { playerPosition[1] = playerPosition[1] + 1};
-            if (keys.Enter && Array.isArray(level.levelMatrix[playerPosition[0]][playerPosition[1]+1]))
-                {
-                    let _item = level.levelMatrix[playerPosition[0]][playerPosition[1]+1]
-                    console.log(_item[1])
-                    inventory.changeInventory(inventory.selectedInventorySlot, _item[1].data)
-                    _item[1].visible = false;
-                    level.levelMatrix[playerPosition[0]][playerPosition[1]+1] = 0
-
-                };
             break;
     }
     level.levelMatrix[playerPosition[0]][playerPosition[1]] = 2
