@@ -7,10 +7,40 @@ div{
 }
 
 div#game{
+    display: block;
     margin: auto;
     border: solid 1px white;
     width: 800px;
     height: 600px;
+}
+
+div#inventory{
+    position: relative;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width:800px;
+}
+
+div.inventorySlot{
+    border: solid 1px white;
+    margin: 0px;
+    display: inline-block;
+    width: 64px;
+    height: 64px
+}
+div.inventorySlot button{
+    background-size: contain;
+    background-color: black;
+    margin: 0px;
+    width: 64px;
+    height: 64px
+    
+}
+
+div.inventorySlot button:focus {
+    outline: none;
+    box-shadow: none;
 }
 
 canvas{
