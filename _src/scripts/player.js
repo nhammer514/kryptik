@@ -1,19 +1,23 @@
 import * as THREE from 'https://cdn.skypack.dev/three@0.128.0/build/three.module.js';
 import * as level from './level.js';
+import * as inventory from './inventory.js';
+import * as itemManager from './itemManager.js';
 
+
+const camera = new THREE.PerspectiveCamera(50, document.getElementById('game').clientWidth / document.getElementById('game').clientHeight, 0.1, 1000);
+const object = new THREE.Object3D();
+var toPosition = new THREE.Vector3();
+var toRotation = new THREE.Vector3();
 var playerPosition = [0,0];
-var playerDirectionReal = 0
-const moveSpeed = 0.1;
-const rotateSpeed = 0.02;
+var playerDirectionReal = 0;
+var health = 100;
+
 const keys = {
     ArrowUp: false,
     ArrowDown: false,
     ArrowLeft: false,
     ArrowRight: false,
-    KeyW: false,
-    KeyA: false,
-    KeyS: false,
-    KeyD: false,
+    Enter: false,
 };
 
 window.addEventListener('keydown', (event) => {
@@ -24,10 +28,9 @@ window.addEventListener('keyup', (event) => {
     if (keys.hasOwnProperty(event.code)) keys[event.code] = false;
 });
 
-const camera = new THREE.PerspectiveCamera(80, document.getElementById('game').clientWidth / document.getElementById('game').clientHeight, 0.1, 1000);
-const object = new THREE.Object3D();
-var toPosition = new THREE.Vector3();
-var toRotation = new THREE.Vector3();
+function setHealth(num){
+    health = num
+}
 
 function spawn(_scene, _position){
     _scene.add(object);
@@ -40,53 +43,104 @@ function spawn(_scene, _position){
     toRotation.y = -(playerDirectionReal*90) * (Math.PI/180)
     toPosition.x = playerPosition[0]*16
     toPosition.z = playerPosition[1]*16
+    inventory.changeInventory(1, itemManager.itemData.potion)
+    inventory.slotSelected(0)
 }
+
 
 function changePosition(){
     let playerDirection;
 
-    level.levelMatrix[playerPosition[0]][playerPosition[1]] = 0
+    level.levelMatrix[playerPosition[0]][playerPosition[1]] = 0;
+
     if (keys.ArrowLeft){
         --playerDirectionReal;
-    }
+    };
+
     if (keys.ArrowRight){
         ++playerDirectionReal;
-    }
+    };
 
     playerDirection = () => {
         if (playerDirectionReal < 0) { return ((4-(Math.abs(playerDirectionReal) % 4))) }
         else { return (Math.abs(playerDirectionReal % 4)) }
     }
+
     switch (((playerDirection()))){
         case 0:
             if (keys.ArrowUp && (level.levelMatrix[playerPosition[0]+1][playerPosition[1]] == 0))
                 { playerPosition[0] = playerPosition[0] + 1};
             if (keys.ArrowDown && (level.levelMatrix[playerPosition[0]-1][playerPosition[1]] == 0))
                 { playerPosition[0] = playerPosition[0] - 1};
+            if (keys.Enter && Array.isArray(level.levelMatrix[playerPosition[0]+1][playerPosition[1]]))
+                {
+                    let _item = level.levelMatrix[playerPosition[0]+1][playerPosition[1]]
+                    console.log(_item[1])
+                    inventory.changeInventory(inventory.selectedInventorySlot, _item[1].data)
+                    _item[1].visible = false;
+                    level.levelMatrix[playerPosition[0]+1][playerPosition[1]] = 0
+
+                };
             break;
         case 4:
             if (keys.ArrowUp && (level.levelMatrix[playerPosition[0]+1][playerPosition[1]] == 0))
                 { playerPosition[0] = playerPosition[0] + 1};
             if (keys.ArrowDown && (level.levelMatrix[playerPosition[0]-1][playerPosition[1]] == 0))
                 { playerPosition[0] = playerPosition[0] - 1};
+            if (keys.Enter && Array.isArray(level.levelMatrix[playerPosition[0]+1][playerPosition[1]]))
+                {
+                    let _item = level.levelMatrix[playerPosition[0]+1][playerPosition[1]]
+                    console.log(_item[1])
+                    inventory.changeInventory(inventory.selectedInventorySlot, _item[1].data)
+                    _item[1].visible = false;
+                    level.levelMatrix[playerPosition[0]+1][playerPosition[1]] = 0
+
+                };
             break;
         case 1:
             if (keys.ArrowUp && (level.levelMatrix[playerPosition[0]][playerPosition[1]+1] == 0))
                 { playerPosition[1] = playerPosition[1] + 1};
             if (keys.ArrowDown && (level.levelMatrix[playerPosition[0]][playerPosition[1]-1] == 0))
                 { playerPosition[1] = playerPosition[1] - 1};
+            if (keys.Enter && Array.isArray(level.levelMatrix[playerPosition[0]][playerPosition[1]+1]))
+                {
+                    let _item = level.levelMatrix[playerPosition[0]][playerPosition[1]+1]
+                    console.log(_item[1])
+                    inventory.changeInventory(inventory.selectedInventorySlot, _item[1].data)
+                    _item[1].visible = false;
+                    level.levelMatrix[playerPosition[0]][playerPosition[1]+1] = 0
+
+                };
             break;
         case 2:
             if (keys.ArrowUp && (level.levelMatrix[playerPosition[0]-1][playerPosition[1]] == 0))
                 { playerPosition[0] = playerPosition[0] - 1};
             if (keys.ArrowDown && (level.levelMatrix[playerPosition[0]+1][playerPosition[1]] == 0))
                 { playerPosition[0] = playerPosition[0] + 1};
+            if (keys.Enter && Array.isArray(level.levelMatrix[playerPosition[0]-1][playerPosition[1]]))
+                {
+                    let _item = level.levelMatrix[playerPosition[0]-1][playerPosition[1]]
+                    console.log(_item[1])
+                    inventory.changeInventory(inventory.selectedInventorySlot, _item[1].data)
+                    _item[1].visible = false;
+                    level.levelMatrix[playerPosition[0]-1][playerPosition[1]] = 0
+
+                };
             break;
         case 3:
             if (keys.ArrowUp && (level.levelMatrix[playerPosition[0]][playerPosition[1]-1] == 0))
                 { playerPosition[1] = playerPosition[1] - 1};
-            if (keys.ArrowDown && (level.levelMatrix[playerPosition[0]][playerPosition[1]-1] == 0))
+            if (keys.ArrowDown && (level.levelMatrix[playerPosition[0]][playerPosition[1]+1] == 0))
                 { playerPosition[1] = playerPosition[1] + 1};
+            if (keys.Enter && Array.isArray(level.levelMatrix[playerPosition[0]][playerPosition[1]+1]))
+                {
+                    let _item = level.levelMatrix[playerPosition[0]][playerPosition[1]+1]
+                    console.log(_item[1])
+                    inventory.changeInventory(inventory.selectedInventorySlot, _item[1].data)
+                    _item[1].visible = false;
+                    level.levelMatrix[playerPosition[0]][playerPosition[1]+1] = 0
+
+                };
             break;
     }
     level.levelMatrix[playerPosition[0]][playerPosition[1]] = 2
@@ -99,7 +153,6 @@ function movePosition(){
     object.position.x += (toPosition.x - object.position.x) / 10;
     object.position.z += (toPosition.z - object.position.z) / 10;
     camera.rotation.y += (toRotation.y - camera.rotation.y) / 10;
-
 }
 
-export { object, camera, spawn, movePosition};
+export { object, camera, spawn, movePosition, health, setHealth};

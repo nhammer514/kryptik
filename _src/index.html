@@ -4,16 +4,21 @@ layout: base.njk
 ---
 <div id="game">
     <canvas id="renderer"></canvas>
-    <div style="text-align: center;">
-        <p> Up/Down Arrows to move forward/backward. <br/>
-            Left/Right Arrows to turn left/right.
-        </p>
+    <div id="inventory">
+        <div class="inventorySlot"><button></button></div>
+        <div class="inventorySlot">
+            <button></button>
+        </div>
+        <div class="inventorySlot">
+            <button></button>
+        </div>
+        <div class="inventorySlot">
+            <button></button>
+        </div>
+        <div class="inventorySlot">
+            <button></button>
+        </div>
     </div>
-    <div id="debug">
-        <div></div>
-        <div></div>
-        <div></div>
-    </div>
-    <script type="module" src="scripts/main.js">
-    </script>
+    <p id="healthText"> Health: 100 </p>
+    <script type="module" src="scripts/main.js"></script>
 </div>

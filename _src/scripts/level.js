@@ -31,14 +31,14 @@ function load(_scene){
                     floorMesh.position.setZ((16*j))
                     floorMesh.rotation.x = -Math.PI / 2;
                     _scene.add(floorMesh)
-                    break;
+                break;
                 case 1:
                     let wallMesh = new THREE.Mesh(wallGeometry, wallMaterial);
                     wallMesh.position.setX((16*i))
                     wallMesh.position.setY(8)
                     wallMesh.position.setZ((16*j))
                     _scene.add(wallMesh)
-                    break;
+                break;
             }
         }
     }
@@ -65,6 +65,9 @@ function generate(levelSize){
     for (let dy = 0; dy < levelSize; dy++){
         levelMatrix[dy][0] = 1;
     }
+    // for (let dy = 0; dy < levelSize; dy++){
+    //     levelMatrix[dy][2] = 1;
+    // }
     for (let dy = 0; dy < levelSize; dy++){
         levelMatrix[dy][9] = 1;
     }
@@ -74,6 +77,7 @@ function generate(levelSize){
     for (let dx = 0; dx < levelSize; dx++){
         levelMatrix[9][dx] = 1;
     }
+    levelMatrix[6][2] = 0;
 }
 
 export { generate, load, levelMatrix, drawMapText};
