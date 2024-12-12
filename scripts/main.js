@@ -39,15 +39,7 @@ player.spawn(scene, [1,1]);
 function animate() {
   player.movePosition()
   requestAnimationFrame( animate );
-
-
   
-  // scene.children.forEach((child) => {
-  //   if (typeof child.animate === "function"){
-  //     child.animate();
-  //   }
-  // });
-
     level.levelMatrix.forEach(row => {
         row.forEach(enemy => {
             if (enemy && typeof enemy.animate === "function") {
