@@ -4,21 +4,18 @@ layout: base.njk
 ---
 <div id="game">
     <canvas id="renderer"></canvas>
-    <div id="inventory">
-        <div class="inventorySlot"><button></button></div>
-        <div class="inventorySlot">
-            <button></button>
+    <div id="gui">
+        <div id="inventory">
+            <div class="inventorySlot"><button></button></div>
+            <div class="inventorySlot"><button></button></div>
+            <div class="inventorySlot"><button></button></div>
+            <div class="inventorySlot"><button></button></div>
+            <div class="inventorySlot"><button></button></div>
+            <p id="inventorySelectedDetails"> Selected Item: </p>
         </div>
-        <div class="inventorySlot">
-            <button></button>
-        </div>
-        <div class="inventorySlot">
-            <button></button>
-        </div>
-        <div class="inventorySlot">
-            <button></button>
+        <div id="stats">
+            100% HEALTH
         </div>
     </div>
-    <p id="healthText"> Health: 100 </p>
     <script type="module" src="scripts/main.js"></script>
 </div>

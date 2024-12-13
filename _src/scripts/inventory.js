@@ -2,6 +2,8 @@ import * as player from './player.js';
 
 var inventory = [-1, -1, -1, -1, -1];
 const htmlInventory = document.getElementById("inventory");
+const stats = document.getElementById("stats");
+const inventoryDetails = document.getElementById("inventorySelectedDetails");
 const slots = Array.from(htmlInventory.getElementsByClassName("inventorySlot"));
 var selectedInventorySlot = 1;
 
@@ -32,9 +34,14 @@ function changeInventory(_slot, _item){
 }
 
 function resetGUI(){
-    document.getElementById("healthText").innerHTML = "Health: " + player.health
-
-    for (let i = 0; i < htmlInventory.childElementCount; i++){
+    stats.innerHTML = player.health + "% HEALTH";
+    if  (inventory[selectedInventorySlot] != -1){
+        inventoryDetails.innerHTML = "Selected Item: " + inventory[selectedInventorySlot].name;
+    }
+    else{
+        inventoryDetails.innerHTML = "Selected Item: Nothing"
+    }
+    for (let i = 0; i < htmlInventory.childElementCount-1; i++){
         let _buttonSlot = htmlInventory.children[i].querySelector("button")
         if (inventory[i] != -1){
             _buttonSlot.style.backgroundImage = "url(" + inventory[i].sprite + ")";

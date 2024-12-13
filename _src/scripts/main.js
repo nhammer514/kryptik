@@ -11,7 +11,7 @@ const scene = new THREE.Scene();
 const renderer = new THREE.WebGLRenderer({
   canvas: document.querySelector('#renderer'),
 });
-renderer.setSize(document.getElementById('game').clientWidth, document.getElementById('game').clientHeight);
+renderer.setSize(document.getElementById('game').clientWidth, document.getElementById('renderer').clientHeight);
 scene.fog = new THREE.Fog( 0x000000, 10, 45 );
 
 // Model Loaders
@@ -28,22 +28,28 @@ scene.add(ambientLight);
 // Level generation
 level.generate(10);
 level.load(scene);
-enemyManager.spawnEnemy(scene, enemyManager.enemyData.rat, [4,4])
+enemyManager.spawnEnemy(scene, enemyManager.enemyData.rat, [5,5])
 itemManager.spawnItem(scene, itemManager.itemData.potion, [4, 3])
-
 
 // Player
 player.spawn(scene, [1,1]);
 
 // Per-Frame/Animate/Step
+let frameCount = 0;
 function animate() {
+  frameCount++;
   player.movePosition()
   requestAnimationFrame( animate );
   
     level.levelMatrix.forEach(row => {
         row.forEach(enemy => {
             if (enemy && typeof enemy.animate === "function") {
-                enemy.animate();
+              enemy.animate();
+            }
+            if (enemy && typeof enemy === "object" && enemy.constructor.name === "enemyBase") {
+              if (frameCount % 60 === 0){
+                enemy.findPath(player.playerPosition)
+              }
             }
         });
     });
@@ -52,4 +58,4 @@ function animate() {
 }
 animate()
 
-export{scene}
+export{scene, frameCount}

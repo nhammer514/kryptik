@@ -1,16 +1,15 @@
 import * as THREE from 'https://cdn.skypack.dev/three@0.128.0/build/three.module.js';
 import * as level from './level.js';
 import * as inventory from './inventory.js';
-import * as itemManager from './itemManager.js';
 
-
-const camera = new THREE.PerspectiveCamera(50, document.getElementById('game').clientWidth / document.getElementById('game').clientHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(50, document.getElementById('game').clientWidth / document.getElementById('renderer').clientHeight, 0.1, 1000);
 const object = new THREE.Object3D();
 var toPosition = new THREE.Vector3();
 var toRotation = new THREE.Vector3();
 var playerPosition = [0,0];
 var playerDirectionReal = 0;
 var health = 100;
+var levelPosition = [];
 
 const keys = {
     ArrowUp: false,
@@ -44,6 +43,7 @@ function spawn(_scene, _position){
     toPosition.x = playerPosition[0]*16
     toPosition.z = playerPosition[1]*16
     inventory.slotSelected(0)
+    inventory.resetGUI()
 }
 
 
@@ -67,11 +67,10 @@ function changePosition() {
 
     // Reset current position in the level matrix
     level.levelMatrix[playerPosition[0]][playerPosition[1]] = 0;
-
+    
     // Update direction
     if (keys.ArrowLeft) playerDirectionReal--;
     if (keys.ArrowRight) playerDirectionReal++;
-
     const playerDirection = ((playerDirectionReal % 4) + 4) % 4; // Normalize direction (0-3)
 
     // Handle movement
@@ -81,7 +80,6 @@ function changePosition() {
     if (keys.ArrowDown) {
         updatePosition(-directionMap[playerDirection].x, -directionMap[playerDirection].z);
     }
-
     // Handle interaction
     if (keys.Enter) {
         const interactX = playerPosition[0] + directionMap[playerDirection].x;
@@ -96,7 +94,7 @@ function changePosition() {
                     target.destroy();
                     break;
                 case 'enemyBase':
-                    target.updatePosition([interactX+1, interactZ]);
+                    target.destroy();
                     break;
             }
         }
@@ -109,10 +107,11 @@ function changePosition() {
     toPosition.z = playerPosition[1] * 16;
 }
 
+// Smooth movement
 function movePosition(){
     object.position.x += (toPosition.x - object.position.x) / 10;
     object.position.z += (toPosition.z - object.position.z) / 10;
     camera.rotation.y += (toRotation.y - camera.rotation.y) / 10;
 }
 
-export { object, camera, spawn, movePosition, health, setHealth};
+export { object, camera, spawn, movePosition, health, setHealth, playerPosition};
