@@ -9,22 +9,38 @@ div{
 div#game{
     display: block;
     margin: auto;
+    width: 800px;
+}
+
+canvas#renderer{
     border: solid 1px white;
+    display: block;
     width: 800px;
     height: 600px;
 }
 
-div#inventory{
-    position: relative;
+div#gui{
     display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width:800px;
+    position: relative;
+}
+
+div#stats{
+    margin-top: 6px;
+    position: absolute;
+    display: inline;
+    text-align: right;
+    right: 0;
+}
+
+div#inventory{
+    margin-top: 6px;
+    left: 0;
+    position: absolute;
+    display: inline-block;
 }
 
 div.inventorySlot{
     border: solid 1px white;
-    margin: 0px;
     display: inline-block;
     width: 64px;
     height: 64px
@@ -38,14 +54,14 @@ div.inventorySlot button{
     
 }
 
+#inventorySelectedDetails{
+    text-align: center;
+    margin-top: 0;
+}
+
 div.inventorySlot button:focus {
     outline: none;
     box-shadow: none;
-}
-
-canvas{
-    width: 100%;
-    height: 100%;
 }
 
 h1{
