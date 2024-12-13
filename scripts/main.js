@@ -30,7 +30,7 @@ level.generate(10);
 level.load(scene);
 enemyManager.spawnEnemy(scene, enemyManager.enemyData.rat, [5,5])
 itemManager.spawnItem(scene, itemManager.itemData.potion, [4, 3])
-
+itemManager.spawnItem(scene, itemManager.itemData.potion, [8, 5])
 // Player
 player.spawn(scene, [1,1]);
 
