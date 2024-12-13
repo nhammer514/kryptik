@@ -65,9 +65,9 @@ function generate(levelSize){
     for (let dy = 0; dy < levelSize; dy++){
         levelMatrix[dy][0] = 1;
     }
-    // for (let dy = 0; dy < levelSize; dy++){
-    //     levelMatrix[dy][2] = 1;
-    // }
+    for (let dy = 0; dy < levelSize; dy++){
+        levelMatrix[dy][2] = 1;
+    }
     for (let dy = 0; dy < levelSize; dy++){
         levelMatrix[dy][9] = 1;
     }
@@ -77,7 +77,16 @@ function generate(levelSize){
     for (let dx = 0; dx < levelSize; dx++){
         levelMatrix[9][dx] = 1;
     }
+    for (let dx = 0; dx < levelSize; dx++){
+        levelMatrix[7][dx] = 1;
+    }
+    for (let dx = 0; dx < levelSize; dx++){
+        levelMatrix[5][dx] = 1;
+    }
+    levelMatrix[5][1] = 0;
     levelMatrix[6][2] = 0;
+    levelMatrix[5][5] = 0;
+    levelMatrix[7][7] = 0;
 }
 
 export { generate, load, levelMatrix, drawMapText};
